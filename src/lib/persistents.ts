@@ -1,5 +1,10 @@
 import { Persistent } from "narraleaf-react";
 import type { PlayableScenarioId } from "@/lib/game-data";
+import {
+    createDefaultScenarioGradeRecord,
+    createDefaultScenarioScoreRecord,
+    type RouteGrade,
+} from "@/lib/route-grading";
 
 export type ScenarioId =
     | "hub"
@@ -8,7 +13,11 @@ export type ScenarioId =
     | "online-jealousy"
     | "peer-pressure"
     | "comparison-online"
-    | "commitment-decisions";
+    | "commitment-decisions"
+    | "dating-norms"
+    | "digital-support";
+
+export type PlayerGender = "boy" | "girl";
 
 export type EndingId =
     | "none"
@@ -24,13 +33,20 @@ export type EndingId =
     | "contentment"
     | "insecurity"
     | "strain"
-    | "pressure";
+    | "pressure"
+    | "clarity"
+    | "drift"
+    | "mismatch"
+    | "support"
+    | "misread"
+    | "distance";
 
 export type PersisData = {
     currentScenario: ScenarioId;
     currentScenarioTitle: string;
     currentScenarioTheme: string;
     currentContentWarning: string;
+    playerGender: PlayerGender;
     currentEnding: EndingId;
     endingTitle: string;
     endingMessage: string;
@@ -44,8 +60,14 @@ export type PersisData = {
     commitment: number;
     communication: number;
     completedScenarios: PlayableScenarioId[];
+    completedCount: number;
     endingGallery: string[];
+    endingsDiscoveredCount: number;
     reflectionUnlocked: boolean;
+    latestScenarioScore: number;
+    latestScenarioGrade: RouteGrade;
+    bestScenarioScores: Record<PlayableScenarioId, number>;
+    bestScenarioGrades: Record<PlayableScenarioId, RouteGrade>;
 };
 
 export const PERSIS_NAMESPACE = "persistent:persis";
@@ -55,6 +77,7 @@ export const defaultPersisData: PersisData = {
     currentScenarioTitle: "",
     currentScenarioTheme: "",
     currentContentWarning: "",
+    playerGender: "girl",
     currentEnding: "none",
     endingTitle: "",
     endingMessage: "",
@@ -68,8 +91,14 @@ export const defaultPersisData: PersisData = {
     commitment: 50,
     communication: 50,
     completedScenarios: [],
+    completedCount: 0,
     endingGallery: [],
+    endingsDiscoveredCount: 0,
     reflectionUnlocked: false,
+    latestScenarioScore: 0,
+    latestScenarioGrade: "none",
+    bestScenarioScores: createDefaultScenarioScoreRecord(),
+    bestScenarioGrades: createDefaultScenarioGradeRecord(),
 };
 
 export const persis = new Persistent<PersisData>("persis", defaultPersisData);

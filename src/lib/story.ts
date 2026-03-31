@@ -7,7 +7,7 @@ import { persis } from "@/lib/persistents";
 
 // Create a new story
 // The name of the story is human-readable and is used for debugging purposes
-const story = new Story("Heartfeed: Relationship Choices");
+const story = new Story("Beyond the Screen");
 
 story.registerPersistent(persis);
 
@@ -18,3 +18,4 @@ story.registerPersistent(persis);
 story.entry(scene1);
 
 export { story };
+

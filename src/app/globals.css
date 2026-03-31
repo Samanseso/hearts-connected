@@ -27,22 +27,97 @@ button {
 }
 
 .heart-ui-button {
-  background-image: url("/asset/Dialogue/ReplyBtn.png");
-  background-size: 100% 100%;
-  background-position: center;
-  background-repeat: no-repeat;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 235, 244, 0.9));
+  box-shadow: 0 12px 24px rgba(86, 52, 67, 0.14);
   color: #5c374a;
+  padding-inline: 1rem;
+  transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+}
+
+.heart-ui-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 28px rgba(86, 52, 67, 0.18);
 }
 
 .heart-ui-button[data-active="true"] {
-  background-image: url("/asset/Dialogue/ReplyBtnPressed.png");
+  background: linear-gradient(135deg, rgba(248, 189, 217, 0.95), rgba(255, 228, 239, 0.98));
 }
 
 .heart-ui-button:active:not(:disabled) {
-  background-image: url("/asset/Dialogue/ReplyBtnPressed.png");
+  background: linear-gradient(135deg, rgba(244, 176, 209, 0.95), rgba(255, 222, 236, 0.98));
 }
 
 .heart-panel {
   background-color: var(--heart-surface);
   box-shadow: 0 18px 40px var(--heart-shadow);
 }
+
+.intro-title {
+  font-family: "Palatino Linotype", "Book Antiqua", Georgia, serif;
+}
+
+.intro-rise {
+  animation: intro-rise 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.intro-float {
+  animation: intro-float 5.6s ease-in-out infinite;
+}
+
+@keyframes intro-rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes intro-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-6px);
+  }
+}
+.loading-ring {
+  animation: loading-ring 3.8s linear infinite;
+}
+
+.loading-bar {
+  width: 40%;
+  animation: loading-bar 1.8s ease-in-out infinite;
+}
+
+@keyframes loading-ring {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes loading-bar {
+  0% {
+    transform: translateX(-120%);
+  }
+
+  50% {
+    transform: translateX(120%);
+  }
+
+  100% {
+    transform: translateX(260%);
+  }
+}
+

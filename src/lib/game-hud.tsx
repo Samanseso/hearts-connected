@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useGame } from "narraleaf-react";
 import { SAVE_KEY } from "@/components/game-hud/constants";
 import { SettingsPanel } from "@/components/game-hud/settings-panel";
@@ -9,8 +9,14 @@ import { StoryInfoToggle } from "@/components/game-hud/story-info-toggle";
 import type { SpeedMode } from "@/components/game-hud/types";
 import { useHudSnapshot } from "@/components/game-hud/use-hud-snapshot";
 import { SCENARIO_META } from "@/lib/game-data";
+import { clearStoredProgress } from "@/lib/progress-storage";
 
-export function GameHud() {
+type GameHudProps = {
+    onReturnToStart?: () => void;
+    onClearData?: () => void;
+};
+
+export function GameHud({ onReturnToStart, onClearData }: GameHudProps) {
     const game = useGame();
     const { snapshot, refreshSnapshot } = useHudSnapshot(game);
     const [infoOpen, setInfoOpen] = useState(false);
@@ -28,10 +34,21 @@ export function GameHud() {
         return SCENARIO_META[persis.currentScenario];
     }, [persis.currentScenario]);
 
-    const completedCount = persis.completedScenarios.length;
-    const endingsFound = persis.endingGallery.length;
-    const infoTitle = currentMeta ? currentMeta.shortLabel : "Story Hub";
+    const completedCount = persis.completedCount;
+    const endingsFound = persis.endingsDiscoveredCount;
+    const infoTitle = currentMeta
+        ? currentMeta.shortLabel
+        : persis.currentScenarioTitle || "Story Hub";
     const infoIcon = currentMeta ? "/asset/Icons/PinkHeart.png" : "/asset/Icons/BlueHeart.png";
+
+    useEffect(() => {
+        const isDashboardScene =
+            persis.currentScenario === "hub" || persis.currentScenario === "reflection-mode";
+        
+
+        // Automatically open infor panel after loading
+        // setInfoOpen(isDashboardScene);
+    }, [persis.currentScenario]);
 
     function quickSave() {
         try {
@@ -63,10 +80,36 @@ export function GameHud() {
     }
 
     function restartStory() {
+        if (onReturnToStart) {
+            onReturnToStart();
+            setSettingsOpen(false);
+            refreshSnapshot();
+            return;
+        }
+
         game.getLiveGame().newGame();
         game.getLiveGame().notify("Story restarted.");
         setSettingsOpen(false);
         refreshSnapshot();
+    }
+
+    function clearGameData() {
+        setSettingsOpen(false);
+
+        if (onClearData) {
+            onClearData();
+            return;
+        }
+
+        try {
+            window.localStorage.removeItem(SAVE_KEY);
+            clearStoredProgress();
+            game.getLiveGame().newGame();
+            game.getLiveGame().notify("Saved game data cleared.");
+            refreshSnapshot();
+        } catch {
+            game.getLiveGame().notify("Could not clear saved data.");
+        }
     }
 
     function toggleAutoForward() {
@@ -91,7 +134,7 @@ export function GameHud() {
                         onClick={() => setInfoOpen((value) => !value)}
                     />
 
-                    {infoOpen ? (
+                    {infoOpen && (
                         <StoryInfoPanel
                             currentMeta={currentMeta}
                             persis={persis}
@@ -100,7 +143,7 @@ export function GameHud() {
                             title={infoTitle}
                             icon={infoIcon}
                         />
-                    ) : null}
+                    )}
                 </div>
 
                 <div className="pointer-events-auto flex shrink-0 flex-col items-end gap-3">
@@ -121,6 +164,7 @@ export function GameHud() {
                             onSave={quickSave}
                             onLoad={quickLoad}
                             onRestart={restartStory}
+                            onClearData={clearGameData}
                             onToggleAutoForward={toggleAutoForward}
                             onSetSpeed={setSpeed}
                         />

@@ -25,7 +25,7 @@ export function StoryInfoToggle({
                 />
                 <span className="min-w-0">
                     <span className="block text-[10px] uppercase tracking-[0.22em] text-[#8a6072]">
-                        Hearts Connected
+                        Beyond the Screen
                     </span>
                     <span className="block truncate text-[16px] font-semibold">
                         {title}
@@ -43,3 +43,4 @@ export function StoryInfoToggle({
         </button>
     );
 }
+

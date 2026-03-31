@@ -44,6 +44,7 @@ export function readHudSnapshot(game: ReturnType<typeof useGame>): HudSnapshot {
             currentScenarioTitle: safeGet(namespace, "currentScenarioTitle", defaultPersisData.currentScenarioTitle),
             currentScenarioTheme: safeGet(namespace, "currentScenarioTheme", defaultPersisData.currentScenarioTheme),
             currentContentWarning: safeGet(namespace, "currentContentWarning", defaultPersisData.currentContentWarning),
+            playerGender: safeGet(namespace, "playerGender", defaultPersisData.playerGender),
             currentEnding: safeGet(namespace, "currentEnding", defaultPersisData.currentEnding),
             endingTitle: safeGet(namespace, "endingTitle", defaultPersisData.endingTitle),
             endingMessage: safeGet(namespace, "endingMessage", defaultPersisData.endingMessage),
@@ -57,8 +58,18 @@ export function readHudSnapshot(game: ReturnType<typeof useGame>): HudSnapshot {
             commitment: safeGet(namespace, "commitment", defaultPersisData.commitment),
             communication: safeGet(namespace, "communication", defaultPersisData.communication),
             completedScenarios: safeGet(namespace, "completedScenarios", defaultPersisData.completedScenarios),
+            completedCount: safeGet(namespace, "completedCount", defaultPersisData.completedCount),
             endingGallery: safeGet(namespace, "endingGallery", defaultPersisData.endingGallery),
+            endingsDiscoveredCount: safeGet(
+                namespace,
+                "endingsDiscoveredCount",
+                defaultPersisData.endingsDiscoveredCount,
+            ),
             reflectionUnlocked: safeGet(namespace, "reflectionUnlocked", defaultPersisData.reflectionUnlocked),
+            latestScenarioScore: safeGet(namespace, "latestScenarioScore", defaultPersisData.latestScenarioScore),
+            latestScenarioGrade: safeGet(namespace, "latestScenarioGrade", defaultPersisData.latestScenarioGrade),
+            bestScenarioScores: safeGet(namespace, "bestScenarioScores", defaultPersisData.bestScenarioScores),
+            bestScenarioGrades: safeGet(namespace, "bestScenarioGrades", defaultPersisData.bestScenarioGrades),
         };
 
         return {
@@ -130,3 +141,5 @@ export function useHudSnapshot(game: ReturnType<typeof useGame>) {
         refreshSnapshot: () => setSnapshot(readHudSnapshot(game)),
     };
 }
+
+

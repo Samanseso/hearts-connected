@@ -10,6 +10,7 @@ export type ScenarioMeta = {
     contentWarning: string;
     summary: string;
     statFocus: string[];
+    endingCount: number;
     startingStats: {
         trust: number;
         contentment: number;
@@ -27,6 +28,8 @@ export const PLAYABLE_SCENARIO_IDS: PlayableScenarioId[] = [
     "peer-pressure",
     "comparison-online",
     "commitment-decisions",
+    "dating-norms",
+    "digital-support",
 ];
 
 export const SCENARIO_META: Record<PlayableScenarioId, ScenarioMeta> = {
@@ -36,8 +39,9 @@ export const SCENARIO_META: Record<PlayableScenarioId, ScenarioMeta> = {
         title: "Social Media Influence on Relationship Expectations",
         theme: "Authenticity over performance",
         contentWarning: "Relationship pressure, comparison, emotional tension",
-        summary: "Alex struggles to separate real affection from online couple culture.",
+        summary: "Alex and Jamie have a real relationship, but online couple culture keeps trying to rewrite what 'special' should look like.",
         statFocus: ["Communication", "Contentment", "Pressure"],
+        endingCount: 3,
         startingStats: {
             trust: 50,
             contentment: 46,
@@ -54,8 +58,9 @@ export const SCENARIO_META: Record<PlayableScenarioId, ScenarioMeta> = {
         title: "Online Jealousy and Trust Issues",
         theme: "Trust in the age of endless visibility",
         contentWarning: "Jealousy, insecurity, arguments, emotional withdrawal",
-        summary: "Riley has to decide whether insecurity becomes a conversation, a spiral, or a fight.",
+        summary: "Riley sees online clues, fills in the blanks, and has to decide whether fear becomes a question, a spiral, or a fight.",
         statFocus: ["Trust", "Anxiety", "Communication"],
+        endingCount: 3,
         startingStats: {
             trust: 45,
             contentment: 48,
@@ -72,8 +77,9 @@ export const SCENARIO_META: Record<PlayableScenarioId, ScenarioMeta> = {
         title: "Peer Pressure in Dating",
         theme: "Choosing your own pace",
         contentWarning: "Peer pressure, awkward social dynamics, emotional discomfort",
-        summary: "Sam weighs social expectations against readiness, honesty, and self-respect.",
+        summary: "Sam has to separate real interest from the pressure of being the last person in the group without a relationship label.",
         statFocus: ["Self-Respect", "Pressure", "Communication"],
+        endingCount: 3,
         startingStats: {
             trust: 48,
             contentment: 50,
@@ -90,8 +96,9 @@ export const SCENARIO_META: Record<PlayableScenarioId, ScenarioMeta> = {
         title: "Comparing Relationships Online",
         theme: "Contentment versus comparison",
         contentWarning: "Self-doubt, comparison, relationship strain",
-        summary: "Jordan tries to understand whether the problem is the relationship or the feed framing it.",
+        summary: "Jordan wants to know whether the relationship is actually lacking, or whether the feed is teaching dissatisfaction.",
         statFocus: ["Contentment", "Anxiety", "Trust"],
+        endingCount: 3,
         startingStats: {
             trust: 50,
             contentment: 42,
@@ -108,8 +115,9 @@ export const SCENARIO_META: Record<PlayableScenarioId, ScenarioMeta> = {
         title: "Commitment Decisions",
         theme: "Honesty before certainty",
         contentWarning: "Commitment anxiety, emotional pressure, breakup themes",
-        summary: "Casey has to choose between false certainty, honest pacing, and avoidance.",
+        summary: "Casey and Morgan are not arguing about love, but about timing, clarity, and whether honesty can arrive before silence does.",
         statFocus: ["Commitment", "Communication", "Pressure"],
+        endingCount: 3,
         startingStats: {
             trust: 52,
             contentment: 49,
@@ -120,4 +128,49 @@ export const SCENARIO_META: Record<PlayableScenarioId, ScenarioMeta> = {
             communication: 51,
         },
     },
+    "dating-norms": {
+        id: "dating-norms",
+        shortLabel: "Scenario 6",
+        title: "Dating Norms and Mixed Signals",
+        theme: "Clarity over assumption",
+        contentWarning: "Ambiguity, social pressure, emotional discomfort",
+        summary: "Dana and Nico are close, but soft-launch culture and other people's assumptions start defining the relationship before they do.",
+        statFocus: ["Communication", "Trust", "Self-Respect"],
+        endingCount: 3,
+        startingStats: {
+            trust: 49,
+            contentment: 50,
+            anxiety: 52,
+            pressure: 55,
+            selfRespect: 51,
+            commitment: 44,
+            communication: 47,
+        },
+    },
+    "digital-support": {
+        id: "digital-support",
+        shortLabel: "Scenario 7",
+        title: "Digital Availability and Emotional Support",
+        theme: "Support is not the same as constant access",
+        contentWarning: "Stress, emotional neglect, miscommunication",
+        summary: "Lea needs comfort during a hard week, but a green online dot starts to feel more meaningful than it really is.",
+        statFocus: ["Communication", "Anxiety", "Contentment"],
+        endingCount: 3,
+        startingStats: {
+            trust: 51,
+            contentment: 45,
+            anxiety: 60,
+            pressure: 47,
+            selfRespect: 49,
+            commitment: 53,
+            communication: 46,
+        },
+    },
 };
+
+export const TOTAL_SCENARIOS = PLAYABLE_SCENARIO_IDS.length;
+
+export const TOTAL_ENDINGS = PLAYABLE_SCENARIO_IDS.reduce(
+    (total, scenarioId) => total + SCENARIO_META[scenarioId].endingCount,
+    0,
+);
