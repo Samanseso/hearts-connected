@@ -1,5 +1,5 @@
 import { Menu } from "narraleaf-react";
-import { casey, createPairSprites, morgan } from "@/scenes/core/cast";
+import { casey, createScene5SpritePair, morgan, scene5SpriteAssets } from "@/scenes/core/cast";
 import {
     adjustStats,
     finishScenario,
@@ -9,7 +9,9 @@ import {
 import { sceneCommitment, sceneResult } from "@/scenes/core/scenes";
 
 export function registerCommitmentScenario() {
-    const [caseySprite, morganSprite] = createPairSprites();
+    const [caseySprite, morganSprite] = createScene5SpritePair();
+
+    scene5SpriteAssets.forEach((asset) => sceneCommitment.preloadImage(asset));
 
     sceneCommitment.action((scene) => [
         ...scenarioIntro("commitment-decisions"),
@@ -143,3 +145,6 @@ export function registerCommitmentScenario() {
             ]),
     ]);
 }
+
+
+

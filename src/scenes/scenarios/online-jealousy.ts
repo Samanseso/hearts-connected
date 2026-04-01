@@ -5,6 +5,7 @@ import {
     riley,
     scene2ChrisExpressions,
     scene2RileyExpressions,
+    scene2SpriteAssets,
     scene2SpriteSwapMotion,
 } from "@/scenes/core/cast";
 import {
@@ -31,6 +32,8 @@ export function registerJealousyScenario() {
         rileySprite.char(scene2RileyExpressions[expression], rileySwap.copy());
     const chrisLook = (expression: keyof typeof scene2ChrisExpressions) =>
         chrisSprite.char(scene2ChrisExpressions[expression], chrisSwap.copy());
+
+    scene2SpriteAssets.forEach((asset) => sceneJealousy.preloadImage(asset));
 
     sceneJealousy.action((scene) => [
         ...scenarioIntro("online-jealousy"),
@@ -195,3 +198,6 @@ export function registerJealousyScenario() {
             ]),
     ]);
 }
+
+
+

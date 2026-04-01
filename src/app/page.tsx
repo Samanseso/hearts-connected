@@ -19,6 +19,8 @@ import { story } from "../lib/story";
 
 type LaunchMode = "new" | "continue" | null;
 
+const MIN_LOADING_SCREEN_MS = 900;
+
 function hasSavedRun(progress: ReturnType<typeof readStoredProgress>) {
     return Boolean(
         progress &&
@@ -30,6 +32,8 @@ function App() {
     const game = useGame();
     const progressReadyRef = useRef(false);
     const pendingStartRef = useRef(false);
+    const launchStartedAtRef = useRef<number | null>(null);
+    const loadingTimerRef = useRef<number | null>(null);
     const [hydrated, setHydrated] = useState(false);
     const [playerMounted, setPlayerMounted] = useState(false);
     const [playerReady, setPlayerReady] = useState(false);
@@ -58,6 +62,14 @@ function App() {
         setSelectedGender(storedProgress?.playerGender ?? "girl");
         setProgressPreview(storedProgress);
         setHydrated(true);
+    }, []);
+
+    useEffect(() => {
+        return () => {
+            if (loadingTimerRef.current !== null) {
+                window.clearTimeout(loadingTimerRef.current);
+            }
+        };
     }, []);
 
     useEffect(() => {
@@ -105,6 +117,13 @@ function App() {
         };
     }, [game]);
 
+    function clearLoadingTimer() {
+        if (loadingTimerRef.current !== null) {
+            window.clearTimeout(loadingTimerRef.current);
+            loadingTimerRef.current = null;
+        }
+    }
+
     function applySelectedGender(liveGame = game.getLiveGame()) {
         liveGame
             .getStorable()
@@ -113,18 +132,40 @@ function App() {
     }
 
     function initializeSession(liveGame = game.getLiveGame()) {
-        pendingStartRef.current = false;
+        clearLoadingTimer();
         liveGame.newGame();
         restoreStoredProgress(liveGame);
         applySelectedGender(liveGame);
         progressReadyRef.current = true;
         saveStoredProgress(liveGame);
         setProgressPreview(readStoredProgress());
-        setStarted(true);
-        setLaunchMode(null);
+
+        const startedAt = launchStartedAtRef.current ?? Date.now();
+        const elapsed = Date.now() - startedAt;
+        const remaining = Math.max(0, MIN_LOADING_SCREEN_MS - elapsed);
+
+        const finalizeLaunch = () => {
+            pendingStartRef.current = false;
+            launchStartedAtRef.current = null;
+            loadingTimerRef.current = null;
+            setStarted(true);
+            setLaunchMode(null);
+        };
+
+        if (remaining === 0) {
+            finalizeLaunch();
+            return;
+        }
+
+        loadingTimerRef.current = window.setTimeout(finalizeLaunch, remaining);
     }
 
     function startStory() {
+        if (launchMode) {
+            return;
+        }
+
+        launchStartedAtRef.current = Date.now();
         pendingStartRef.current = true;
         setLaunchMode(hasSavedRun(progressPreview) ? "continue" : "new");
 
@@ -141,8 +182,10 @@ function App() {
     function returnToStartScreen() {
         const liveGame = game.getLiveGame();
 
+        clearLoadingTimer();
         progressReadyRef.current = false;
         pendingStartRef.current = false;
+        launchStartedAtRef.current = null;
         setLaunchMode(null);
         liveGame.newGame();
         restoreStoredProgress(liveGame);
@@ -155,8 +198,10 @@ function App() {
     function clearGameData() {
         const liveGame = game.getLiveGame();
 
+        clearLoadingTimer();
         progressReadyRef.current = false;
         pendingStartRef.current = false;
+        launchStartedAtRef.current = null;
         setLaunchMode(null);
         clearStoredProgress();
 
@@ -178,11 +223,11 @@ function App() {
         }
     }
 
-    const loadingTitle = launchMode === "continue" ? "Loading your dashboard" : "Preparing your first session";
+    const loadingTitle = launchMode === "continue" ? "Opening your dashboard" : "Preparing the story";
     const loadingDetail =
         launchMode === "continue"
-            ? "Restoring your progress, syncing discovered endings, and reopening the story hub."
-            : "Building your save state, setting your perspective, and preparing the story hub.";
+            ? "Restoring progress, scenes, and route memory."
+            : "Building your session, perspective, and first load.";
 
     return (
         <div className="relative h-screen w-screen overflow-hidden">

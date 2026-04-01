@@ -5,6 +5,7 @@ import {
     jamie,
     scene1AlexExpressions,
     scene1JamieExpressions,
+    scene1SpriteAssets,
     scene1SpriteSwapMotion,
 } from "@/scenes/core/cast";
 import {
@@ -31,6 +32,8 @@ export function registerSocialMediaScenario() {
         alexSprite.char(scene1AlexExpressions[expression], alexSwap.copy());
     const jamieLook = (expression: keyof typeof scene1JamieExpressions) =>
         jamieSprite.char(scene1JamieExpressions[expression], jamieSwap.copy());
+
+    scene1SpriteAssets.forEach((asset) => sceneSocialMedia.preloadImage(asset));
 
     sceneSocialMedia.action((scene) => [
         ...scenarioIntro("social-media-expectations"),
@@ -194,3 +197,6 @@ export function registerSocialMediaScenario() {
             ]),
     ]);
 }
+
+
+

@@ -1,5 +1,5 @@
 import { Menu } from "narraleaf-react";
-import { createPairSprites, dana, nico } from "@/scenes/core/cast";
+import { createScene6SpritePair, dana, nico, scene6SpriteAssets } from "@/scenes/core/cast";
 import {
     adjustStats,
     finishScenario,
@@ -9,7 +9,9 @@ import {
 import { sceneDatingNorms, sceneResult } from "@/scenes/core/scenes";
 
 export function registerDatingNormsScenario() {
-    const [danaSprite, nicoSprite] = createPairSprites();
+    const [danaSprite, nicoSprite] = createScene6SpritePair();
+
+    scene6SpriteAssets.forEach((asset) => sceneDatingNorms.preloadImage(asset));
 
     sceneDatingNorms.action((scene) => [
         ...scenarioIntro("dating-norms"),
@@ -123,3 +125,6 @@ export function registerDatingNormsScenario() {
             ]),
     ]);
 }
+
+
+

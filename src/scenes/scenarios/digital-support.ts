@@ -1,5 +1,5 @@
 import { Menu } from "narraleaf-react";
-import { createPairSprites, lea, micah } from "@/scenes/core/cast";
+import { createScene7SpritePair, lea, micah, scene7SpriteAssets } from "@/scenes/core/cast";
 import {
     adjustStats,
     finishScenario,
@@ -9,7 +9,9 @@ import {
 import { sceneDigitalSupport, sceneResult } from "@/scenes/core/scenes";
 
 export function registerDigitalSupportScenario() {
-    const [leaSprite, micahSprite] = createPairSprites();
+    const [leaSprite, micahSprite] = createScene7SpritePair();
+
+    scene7SpriteAssets.forEach((asset) => sceneDigitalSupport.preloadImage(asset));
 
     sceneDigitalSupport.action((scene) => [
         ...scenarioIntro("digital-support"),
@@ -122,3 +124,6 @@ export function registerDigitalSupportScenario() {
             ]),
     ]);
 }
+
+
+

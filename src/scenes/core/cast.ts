@@ -23,6 +23,68 @@ export const nico = new Character("Nico");
 export const lea = new Character("Lea");
 export const micah = new Character("Micah");
 
+type SpriteLayout = {
+    xalign: number;
+    yalign: number;
+    zoom: number;
+};
+
+type GenericExpressionSet = {
+    neutral: string;
+    concern: string;
+    upset: string;
+    serious: string;
+    open: string;
+    soft: string;
+};
+
+export type SpriteSwapMotion = {
+    duration: number;
+    xOffset: number;
+};
+
+function buildGenericExpressionSet(sceneNumber: number, characterId: string): GenericExpressionSet {
+    return {
+        neutral: `/asset/characters/scene${sceneNumber}/${characterId}_1.png`,
+        concern: `/asset/characters/scene${sceneNumber}/${characterId}_2.png`,
+        upset: `/asset/characters/scene${sceneNumber}/${characterId}_3.png`,
+        serious: `/asset/characters/scene${sceneNumber}/${characterId}_4.png`,
+        open: `/asset/characters/scene${sceneNumber}/${characterId}_5.png`,
+        soft: `/asset/characters/scene${sceneNumber}/${characterId}_6.png`,
+    };
+}
+
+function buildSpriteAssetList(...sets: Array<Record<string, string>>) {
+    return sets.flatMap((set) => Object.values(set));
+}
+
+function createSprite(name: string, src: string, layout: SpriteLayout) {
+    return new Image({
+        name,
+        src,
+        autoFit: false,
+        position: {
+            xalign: layout.xalign,
+            yalign: layout.yalign,
+        },
+        zoom: layout.zoom,
+    });
+}
+
+function createSpritePair(
+    leftName: string,
+    leftSrc: string,
+    leftLayout: SpriteLayout,
+    rightName: string,
+    rightSrc: string,
+    rightLayout: SpriteLayout,
+) {
+    return [
+        createSprite(leftName, leftSrc, leftLayout),
+        createSprite(rightName, rightSrc, rightLayout),
+    ] as const;
+}
+
 export const scene1AlexExpressions = {
     neutral: "/asset/characters/scene1/alex_1.png",
     insecure: "/asset/characters/scene1/alex_2.png",
@@ -59,29 +121,38 @@ export const scene2ChrisExpressions = {
     open: "/asset/characters/scene2/chris_6.png",
 } as const;
 
-type SpriteLayout = {
-    xalign: number;
-    yalign: number;
-    zoom: number;
-};
+export const scene3SamExpressions = buildGenericExpressionSet(3, "sam");
+export const scene3TaylorExpressions = buildGenericExpressionSet(3, "taylor");
 
-export type SpriteSwapMotion = {
-    duration: number;
-    xOffset: number;
-};
+export const scene4JordanExpressions = buildGenericExpressionSet(4, "jordan");
+export const scene4ReeseExpressions = buildGenericExpressionSet(4, "reese");
 
-// Scene 1 uses custom portrait art, so keep the layout values separate and easy to tweak.
-// If Alex feels too large, lower `zoom`. If he is too far left/right or too high/low,
-// adjust `xalign` and `yalign`.
+export const scene5CaseyExpressions = buildGenericExpressionSet(5, "casey");
+export const scene5MorganExpressions = buildGenericExpressionSet(5, "morgan");
+
+export const scene6DanaExpressions = buildGenericExpressionSet(6, "dana");
+export const scene6NicoExpressions = buildGenericExpressionSet(6, "nico");
+
+export const scene7LeaExpressions = buildGenericExpressionSet(7, "lea");
+export const scene7MicahExpressions = buildGenericExpressionSet(7, "micah");
+
+export const scene1SpriteAssets = buildSpriteAssetList(scene1AlexExpressions, scene1JamieExpressions);
+export const scene2SpriteAssets = buildSpriteAssetList(scene2RileyExpressions, scene2ChrisExpressions);
+export const scene3SpriteAssets = buildSpriteAssetList(scene3SamExpressions, scene3TaylorExpressions);
+export const scene4SpriteAssets = buildSpriteAssetList(scene4JordanExpressions, scene4ReeseExpressions);
+export const scene5SpriteAssets = buildSpriteAssetList(scene5CaseyExpressions, scene5MorganExpressions);
+export const scene6SpriteAssets = buildSpriteAssetList(scene6DanaExpressions, scene6NicoExpressions);
+export const scene7SpriteAssets = buildSpriteAssetList(scene7LeaExpressions, scene7MicahExpressions);
+
 export const scene1SpriteLayout: Record<"alex" | "jamie", SpriteLayout> = {
     alex: {
         xalign: 0.25,
-        yalign: 0.40,
+        yalign: 0.4,
         zoom: 0.5,
     },
     jamie: {
         xalign: 0.73,
-        yalign: 0.40,
+        yalign: 0.4,
         zoom: 0.5,
     },
 };
@@ -99,8 +170,71 @@ export const scene2SpriteLayout: Record<"riley" | "chris", SpriteLayout> = {
     },
 };
 
-// Expression swaps feel better with a slight inward drift instead of a hard pop.
-// Negative offset means the next sprite starts farther left; positive starts farther right.
+export const scene3SpriteLayout: Record<"sam" | "taylor", SpriteLayout> = {
+    sam: {
+        xalign: 0.27,
+        yalign: 0.4,
+        zoom: 0.5,
+    },
+    taylor: {
+        xalign: 0.73,
+        yalign: 0.4,
+        zoom: 0.5,
+    },
+};
+
+export const scene4SpriteLayout: Record<"jordan" | "reese", SpriteLayout> = {
+    jordan: {
+        xalign: 0.27,
+        yalign: 0.4,
+        zoom: 0.5,
+    },
+    reese: {
+        xalign: 0.73,
+        yalign: 0.4,
+        zoom: 0.5,
+    },
+};
+
+export const scene5SpriteLayout: Record<"casey" | "morgan", SpriteLayout> = {
+    casey: {
+        xalign: 0.27,
+        yalign: 0.4,
+        zoom: 0.52,
+    },
+    morgan: {
+        xalign: 0.73,
+        yalign: 0.4,
+        zoom: 0.52,
+    },
+};
+
+export const scene6SpriteLayout: Record<"dana" | "nico", SpriteLayout> = {
+    dana: {
+        xalign: 0.27,
+        yalign: 0.4,
+        zoom: 0.52,
+    },
+    nico: {
+        xalign: 0.73,
+        yalign: 0.4,
+        zoom: 0.52,
+    },
+};
+
+export const scene7SpriteLayout: Record<"lea" | "micah", SpriteLayout> = {
+    lea: {
+        xalign: 0.27,
+        yalign: 0.4,
+        zoom: 0.52,
+    },
+    micah: {
+        xalign: 0.73,
+        yalign: 0.4,
+        zoom: 0.52,
+    },
+};
+
 export const scene1SpriteSwapMotion: Record<"alex" | "jamie", SpriteSwapMotion> = {
     alex: {
         duration: 160,
@@ -126,6 +260,7 @@ export const scene2SpriteSwapMotion: Record<"riley" | "chris", SpriteSwapMotion>
 export function createSingleSprite() {
     return new Image({
         src: "/char/narra.png",
+        autoFit: false,
         position: {
             xalign: 0.5,
             yalign: 0.42,
@@ -134,69 +269,79 @@ export function createSingleSprite() {
     });
 }
 
-export function createPairSprites() {
-    return [
-        new Image({
-            src: "/char/narra.png",
-            position: {
-                xalign: 0.28,
-                yalign: 0.44,
-            },
-            zoom: 0.52,
-        }),
-        new Image({
-            src: "/char/narra.png",
-            position: {
-                xalign: 0.72,
-                yalign: 0.44,
-            },
-            zoom: 0.52,
-        }),
-    ] as const;
-}
-
 export function createScene1SpritePair() {
-    return [
-        new Image({
-            name: "Alex Scene 1 Sprite",
-            src: scene1AlexExpressions.insecure,
-            position: {
-                xalign: scene1SpriteLayout.alex.xalign,
-                yalign: scene1SpriteLayout.alex.yalign,
-            },
-            zoom: scene1SpriteLayout.alex.zoom,
-        }),
-        new Image({
-            name: "Jamie Scene 1 Sprite",
-            src: scene1JamieExpressions.warm,
-            position: {
-                xalign: scene1SpriteLayout.jamie.xalign,
-                yalign: scene1SpriteLayout.jamie.yalign,
-            },
-            zoom: scene1SpriteLayout.jamie.zoom,
-        }),
-    ] as const;
+    return createSpritePair(
+        "Alex Scene 1 Sprite",
+        scene1AlexExpressions.insecure,
+        scene1SpriteLayout.alex,
+        "Jamie Scene 1 Sprite",
+        scene1JamieExpressions.warm,
+        scene1SpriteLayout.jamie,
+    );
 }
 
 export function createScene2SpritePair() {
-    return [
-        new Image({
-            name: "Riley Scene 2 Sprite",
-            src: scene2RileyExpressions.neutral,
-            position: {
-                xalign: scene2SpriteLayout.riley.xalign,
-                yalign: scene2SpriteLayout.riley.yalign,
-            },
-            zoom: scene2SpriteLayout.riley.zoom,
-        }),
-        new Image({
-            name: "Chris Scene 2 Sprite",
-            src: scene2ChrisExpressions.friendly,
-            position: {
-                xalign: scene2SpriteLayout.chris.xalign,
-                yalign: scene2SpriteLayout.chris.yalign,
-            },
-            zoom: scene2SpriteLayout.chris.zoom,
-        }),
-    ] as const;
+    return createSpritePair(
+        "Riley Scene 2 Sprite",
+        scene2RileyExpressions.neutral,
+        scene2SpriteLayout.riley,
+        "Chris Scene 2 Sprite",
+        scene2ChrisExpressions.friendly,
+        scene2SpriteLayout.chris,
+    );
+}
+
+export function createScene3SpritePair() {
+    return createSpritePair(
+        "Sam Scene 3 Sprite",
+        scene3SamExpressions.neutral,
+        scene3SpriteLayout.sam,
+        "Taylor Scene 3 Sprite",
+        scene3TaylorExpressions.neutral,
+        scene3SpriteLayout.taylor,
+    );
+}
+
+export function createScene4SpritePair() {
+    return createSpritePair(
+        "Jordan Scene 4 Sprite",
+        scene4JordanExpressions.neutral,
+        scene4SpriteLayout.jordan,
+        "Reese Scene 4 Sprite",
+        scene4ReeseExpressions.neutral,
+        scene4SpriteLayout.reese,
+    );
+}
+
+export function createScene5SpritePair() {
+    return createSpritePair(
+        "Casey Scene 5 Sprite",
+        scene5CaseyExpressions.neutral,
+        scene5SpriteLayout.casey,
+        "Morgan Scene 5 Sprite",
+        scene5MorganExpressions.neutral,
+        scene5SpriteLayout.morgan,
+    );
+}
+
+export function createScene6SpritePair() {
+    return createSpritePair(
+        "Dana Scene 6 Sprite",
+        scene6DanaExpressions.neutral,
+        scene6SpriteLayout.dana,
+        "Nico Scene 6 Sprite",
+        scene6NicoExpressions.neutral,
+        scene6SpriteLayout.nico,
+    );
+}
+
+export function createScene7SpritePair() {
+    return createSpritePair(
+        "Lea Scene 7 Sprite",
+        scene7LeaExpressions.neutral,
+        scene7SpriteLayout.lea,
+        "Micah Scene 7 Sprite",
+        scene7MicahExpressions.neutral,
+        scene7SpriteLayout.micah,
+    );
 }

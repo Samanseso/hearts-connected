@@ -1,5 +1,5 @@
 import { Menu } from "narraleaf-react";
-import { createPairSprites, jordan, reese } from "@/scenes/core/cast";
+import { createScene4SpritePair, jordan, reese, scene4SpriteAssets } from "@/scenes/core/cast";
 import {
     adjustStats,
     finishScenario,
@@ -9,7 +9,9 @@ import {
 import { sceneComparison, sceneResult } from "@/scenes/core/scenes";
 
 export function registerComparisonScenario() {
-    const [jordanSprite, reeseSprite] = createPairSprites();
+    const [jordanSprite, reeseSprite] = createScene4SpritePair();
+
+    scene4SpriteAssets.forEach((asset) => sceneComparison.preloadImage(asset));
 
     sceneComparison.action((scene) => [
         ...scenarioIntro("comparison-online"),
@@ -143,3 +145,6 @@ export function registerComparisonScenario() {
             ]),
     ]);
 }
+
+
+

@@ -1,5 +1,5 @@
 import { Menu } from "narraleaf-react";
-import { createPairSprites, narra, sam, taylor } from "@/scenes/core/cast";
+import { createScene3SpritePair, narra, sam, scene3SpriteAssets, taylor } from "@/scenes/core/cast";
 import {
     adjustStats,
     finishScenario,
@@ -9,7 +9,9 @@ import {
 import { scenePeerPressure, sceneResult } from "@/scenes/core/scenes";
 
 export function registerPeerPressureScenario() {
-    const [samSprite, taylorSprite] = createPairSprites();
+    const [samSprite, taylorSprite] = createScene3SpritePair();
+
+    scene3SpriteAssets.forEach((asset) => scenePeerPressure.preloadImage(asset));
 
     scenePeerPressure.action((scene) => [
         ...scenarioIntro("peer-pressure"),
@@ -142,4 +144,7 @@ export function registerPeerPressureScenario() {
             ]),
     ]);
 }
+
+
+
 
