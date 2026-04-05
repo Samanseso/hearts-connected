@@ -1,9 +1,8 @@
-import { Menu } from "narraleaf-react";
+﻿import { Menu } from "narraleaf-react";
 import { createScene4SpritePair, jordan, reese, scene4SpriteAssets } from "@/scenes/core/cast";
 import {
     adjustStats,
     finishScenario,
-    genderWord,
     scenarioIntro,
 } from "@/scenes/core/helpers";
 import { sceneComparison, sceneResult } from "@/scenes/core/scenes";
@@ -18,7 +17,7 @@ export function registerComparisonScenario() {
         jordanSprite.show({ duration: 500 }),
         reeseSprite.show({ duration: 500 }),
         jordan`Date dumps, anniversary reels, spontaneous road trips on a random Tuesday. The feed is full of relationships that look like they were written by a marketing team.`,
-        jordan`And somehow I still end up asking whether I'm a disappointing ${genderWord("boyfriend", "girlfriend")} because Reese and I mostly have grocery runs, study breaks, and check-ins between deadlines.`,
+        jordan`And somehow I still end up asking whether I'm a disappointing partner because Reese and I mostly have grocery runs, study breaks, and check-ins between deadlines.`,
         reese`You're staring at your phone like it owes you an apology.`,
         jordan`Maybe it does. Or maybe I do for giving it this much power.`,
         reese`Either way, talk to me before you decide we're losing something I didn't know we'd lost.`,
@@ -145,6 +144,8 @@ export function registerComparisonScenario() {
             ]),
     ]);
 }
+
+
 
 
 

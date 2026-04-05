@@ -5,7 +5,6 @@ import {
     persis,
     type EndingId,
     type PersisData,
-    type PlayerGender,
 } from "@/lib/persistents";
 import {
     calculateRouteScore,
@@ -234,10 +233,4 @@ export function scenarioIntro(scenarioId: PlayableScenarioId) {
     ];
 }
 
-export function genderWord(boyText: string, girlText: string) {
-    return persis.conditional(persis.equals("playerGender", "boy"), boyText, girlText);
-}
 
-export function playerGenderLabel(gender: PlayerGender) {
-    return gender === "boy" ? "Boy Perspective" : "Girl Perspective";
-}

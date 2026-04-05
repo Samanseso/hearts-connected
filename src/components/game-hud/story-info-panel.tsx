@@ -39,8 +39,8 @@ function averageBestScore(persis: PersisData) {
     return Math.round(values.reduce((sum, value) => sum + value, 0) / values.length);
 }
 
-function formatPerspective(persis: PersisData) {
-    return persis.playerGender === "boy" ? "Boy perspective" : "Girl perspective";
+function formatStoryMode() {
+    return "Reflective anthology";
 }
 
 function buildAchievementBoard(persis: PersisData) {
@@ -147,7 +147,7 @@ export function StoryInfoPanel({
                                 {title}
                             </h2>
                             <div className="inline-flex rounded-full bg-white/78 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#7a5567] shadow-[0_6px_14px_rgba(92,54,75,0.1)]">
-                                {formatPerspective(persis)}
+                                {formatStoryMode()}
                             </div>
                         </div>
                     </div>
@@ -441,4 +441,6 @@ export function StoryInfoPanel({
         </div>
     );
 }
+
+
 

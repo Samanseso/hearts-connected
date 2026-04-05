@@ -1,9 +1,8 @@
-import { Menu } from "narraleaf-react";
+﻿import { Menu } from "narraleaf-react";
 import { createScene3SpritePair, narra, sam, scene3SpriteAssets, taylor } from "@/scenes/core/cast";
 import {
     adjustStats,
     finishScenario,
-    genderWord,
     scenarioIntro,
 } from "@/scenes/core/helpers";
 import { scenePeerPressure, sceneResult } from "@/scenes/core/scenes";
@@ -18,7 +17,7 @@ export function registerPeerPressureScenario() {
         samSprite.show({ duration: 500 }),
         taylorSprite.show({ duration: 500 }),
         sam`Lunch should feel normal, but my friends have decided my love life is apparently a group project.`,
-        sam`They're joking, but the joke keeps landing on the same point: last single ${genderWord("guy", "girl")} in the friend group, so clearly I need fixing.`,
+        sam`They're joking, but the joke keeps landing on the same point: I'm the last single one in the friend group, so clearly I need fixing.`,
         "A chorus of voices keeps pushing one idea.",
         narra`Friend 1: You're the only single one left!`,
         narra`Friend 2: Taylor literally likes talking to you. Just date already!`,
@@ -144,6 +143,8 @@ export function registerPeerPressureScenario() {
             ]),
     ]);
 }
+
+
 
 
 

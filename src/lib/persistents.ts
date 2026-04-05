@@ -17,8 +17,6 @@ export type ScenarioId =
     | "dating-norms"
     | "digital-support";
 
-export type PlayerGender = "boy" | "girl";
-
 export type EndingId =
     | "none"
     | "healthy"
@@ -46,7 +44,6 @@ export type PersisData = {
     currentScenarioTitle: string;
     currentScenarioTheme: string;
     currentContentWarning: string;
-    playerGender: PlayerGender;
     currentEnding: EndingId;
     endingTitle: string;
     endingMessage: string;
@@ -77,7 +74,6 @@ export const defaultPersisData: PersisData = {
     currentScenarioTitle: "",
     currentScenarioTheme: "",
     currentContentWarning: "",
-    playerGender: "girl",
     currentEnding: "none",
     endingTitle: "",
     endingMessage: "",

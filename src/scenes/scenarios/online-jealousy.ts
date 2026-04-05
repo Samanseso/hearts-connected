@@ -1,4 +1,4 @@
-import { FadeIn, Menu } from "narraleaf-react";
+﻿import { FadeIn, Menu } from "narraleaf-react";
 import {
     chris,
     createScene2SpritePair,
@@ -11,7 +11,6 @@ import {
 import {
     adjustStats,
     finishScenario,
-    genderWord,
     scenarioIntro,
 } from "@/scenes/core/helpers";
 import { sceneJealousy, sceneResult } from "@/scenes/core/scenes";
@@ -42,7 +41,7 @@ export function registerJealousyScenario() {
         rileyLook("neutral"),
         riley`Chris liked her new post, then the next one, then the one from two weeks ago.`,
         rileyLook("anxious"),
-        riley`I hate how quickly my brain turns that into a story about me not being enough as a ${genderWord("boyfriend", "girlfriend")}.`,
+        riley`I hate how quickly my brain turns that into a story about me not being enough in this relationship.`,
         riley`Nothing has technically happened, which almost makes it worse. It means I have to decide what to do with my own imagination first.`,
         chrisLook("friendly"),
         chris`You've been typing in our chat and deleting for five minutes. Should I be nervous?`,
@@ -81,7 +80,7 @@ export function registerJealousyScenario() {
                     .choose("Back off too quickly because asking for reassurance suddenly feels embarrassing.", [
                         adjustStats({ communication: -8, selfRespect: -4, anxiety: 8, contentment: -4 }),
                         rileyLook("retreat"),
-                        riley`Actually, forget it. I don't want to be that jealous ${genderWord("guy", "girl")}.`,
+                        riley`Actually, forget it. I don't want to be that jealous person.`,
                         chrisLook("hurt"),
                         chris`You're not helping either of us by disappearing right after bringing it up.`,
                         riley`I know. I just don't know how to need things without feeling dramatic.`,
@@ -198,6 +197,8 @@ export function registerJealousyScenario() {
             ]),
     ]);
 }
+
+
 
 
 

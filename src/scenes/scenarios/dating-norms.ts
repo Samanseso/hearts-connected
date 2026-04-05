@@ -1,9 +1,8 @@
-import { Menu } from "narraleaf-react";
+﻿import { Menu } from "narraleaf-react";
 import { createScene6SpritePair, dana, nico, scene6SpriteAssets } from "@/scenes/core/cast";
 import {
     adjustStats,
     finishScenario,
-    genderWord,
     scenarioIntro,
 } from "@/scenes/core/helpers";
 import { sceneDatingNorms, sceneResult } from "@/scenes/core/scenes";
@@ -19,7 +18,7 @@ export function registerDatingNormsScenario() {
         nicoSprite.show({ duration: 500 }),
         "A cropped hand photo on Nico's story is enough for the group chat to decide Dana and Nico are suddenly official.",
         dana`I like you. I just don't like the feeling of other people deciding what that means first.`,
-        dana`The weird part is how fast people start assuming they know what kind of ${genderWord("boyfriend", "girlfriend")} I'm supposed to be once the rumor starts.`,
+        dana`The weird part is how fast people start assuming they know what kind of partner I'm supposed to be once the rumor starts.`,
         nico`Same. I didn't mean for one post to become a relationship announcement.`,
         Menu.prompt("What does Dana do with the sudden label?")
             .choose("Let everyone assume the relationship is official.", [
@@ -125,6 +124,8 @@ export function registerDatingNormsScenario() {
             ]),
     ]);
 }
+
+
 
 
 

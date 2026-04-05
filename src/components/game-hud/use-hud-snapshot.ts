@@ -44,7 +44,6 @@ export function readHudSnapshot(game: ReturnType<typeof useGame>): HudSnapshot {
             currentScenarioTitle: safeGet(namespace, "currentScenarioTitle", defaultPersisData.currentScenarioTitle),
             currentScenarioTheme: safeGet(namespace, "currentScenarioTheme", defaultPersisData.currentScenarioTheme),
             currentContentWarning: safeGet(namespace, "currentContentWarning", defaultPersisData.currentContentWarning),
-            playerGender: safeGet(namespace, "playerGender", defaultPersisData.playerGender),
             currentEnding: safeGet(namespace, "currentEnding", defaultPersisData.currentEnding),
             endingTitle: safeGet(namespace, "endingTitle", defaultPersisData.endingTitle),
             endingMessage: safeGet(namespace, "endingMessage", defaultPersisData.endingMessage),
@@ -141,5 +140,3 @@ export function useHudSnapshot(game: ReturnType<typeof useGame>) {
         refreshSnapshot: () => setSnapshot(readHudSnapshot(game)),
     };
 }
-
-

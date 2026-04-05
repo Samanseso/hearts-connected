@@ -14,16 +14,47 @@
   --font-mono: var(--font-geist-mono);
 }
 
+html {
+  width: 100%;
+  height: 100%;
+  background: #08060b;
+}
+
 body {
-  background:
-    linear-gradient(180deg, rgba(255, 245, 247, 0.9) 0%, rgba(238, 248, 250, 0.7) 100%),
-    var(--background);
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: #08060b;
   color: var(--foreground);
   font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+  overscroll-behavior: none;
+}
+
+body > * {
+  min-height: 100vh;
 }
 
 button {
   font: inherit;
+}
+
+.__narraleaf_content-player {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background-color: #08060b;
+  background-image:
+    linear-gradient(180deg, rgba(8, 6, 11, 0.12) 0%, rgba(8, 6, 11, 0.48) 100%),
+    url("/asset/background.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.__narraleaf_content-player > div {
+  width: 100% !important;
+  height: 100% !important;
 }
 
 .heart-ui-button {
@@ -66,6 +97,19 @@ button {
   animation: intro-float 5.6s ease-in-out infinite;
 }
 
+.loading-backdrop-shift {
+  animation: loading-backdrop-shift 12s ease-in-out infinite alternate;
+}
+
+.loading-title-glow {
+  animation: loading-title-glow 2.8s ease-in-out infinite;
+}
+
+.loading-bar {
+  width: 42%;
+  animation: loading-bar 1.9s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+
 @keyframes intro-rise {
   from {
     opacity: 0;
@@ -88,31 +132,36 @@ button {
     transform: translateY(-6px);
   }
 }
-.loading-ring {
-  animation: loading-ring 3.8s linear infinite;
-}
 
-.loading-bar {
-  width: 40%;
-  animation: loading-bar 1.8s ease-in-out infinite;
-}
-
-@keyframes loading-ring {
+@keyframes loading-backdrop-shift {
   from {
-    transform: rotate(0deg);
+    transform: scale(1.05) translate3d(-1.2%, -0.4%, 0);
   }
 
   to {
-    transform: rotate(360deg);
+    transform: scale(1.1) translate3d(1.4%, 0.8%, 0);
+  }
+}
+
+@keyframes loading-title-glow {
+  0%,
+  100% {
+    opacity: 0.92;
+    text-shadow: 0 12px 30px rgba(0, 0, 0, 0.34);
+  }
+
+  50% {
+    opacity: 1;
+    text-shadow: 0 14px 36px rgba(255, 217, 235, 0.14), 0 12px 30px rgba(0, 0, 0, 0.34);
   }
 }
 
 @keyframes loading-bar {
   0% {
-    transform: translateX(-120%);
+    transform: translateX(-140%);
   }
 
-  50% {
+  55% {
     transform: translateX(120%);
   }
 
@@ -120,4 +169,3 @@ button {
     transform: translateX(260%);
   }
 }
-

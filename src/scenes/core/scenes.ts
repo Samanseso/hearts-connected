@@ -2,28 +2,28 @@ import { Scene } from "narraleaf-react";
 import { CHARACTER_GROUPS } from "@/lib/character-data";
 import type { PlayableScenarioId } from "@/lib/game-data";
 
-const HOME_BACKGROUND = "/asset/HomeScreen/HomeScreenBackground.jpg";
-const CHARACTER_BACKGROUND = "/asset/CharacterScreen/CharacterSheetBackground.png";
-const STORY_BACKGROUND = "/asset/Background.jpg";
+const FULLSCREEN_BACKGROUND = "/asset/background.png";
+const CHARACTER_BACKGROUND = FULLSCREEN_BACKGROUND;
+const STORY_BACKGROUND = "transparent";
 
 export const sceneHub = new Scene("hub: relationship scenarios", {
-    background: HOME_BACKGROUND,
+    background: STORY_BACKGROUND,
 });
 
 export const sceneResearch = new Scene("extras: research notes", {
-    background: HOME_BACKGROUND,
+    background: STORY_BACKGROUND,
 });
 
 export const sceneCharacterDirectory = new Scene("extras: character directory", {
-    background: CHARACTER_BACKGROUND,
+    background: STORY_BACKGROUND,
 });
 
 export const sceneAchievementBoard = new Scene("extras: achievement board", {
-    background: HOME_BACKGROUND,
+    background: STORY_BACKGROUND,
 });
 
 export const sceneCredits = new Scene("extras: credits", {
-    background: HOME_BACKGROUND,
+    background: STORY_BACKGROUND,
 });
 
 export const sceneResult = new Scene("result: scenario ending", {
@@ -62,7 +62,7 @@ export const characterScenes = Object.fromEntries(
     CHARACTER_GROUPS.map((group) => [
         group.id,
         new Scene(`character page: ${group.label}`, {
-            background: CHARACTER_BACKGROUND,
+            background: STORY_BACKGROUND,
         }),
     ]),
 ) as Record<string, Scene>;
@@ -76,3 +76,5 @@ export const scenarioSceneMap: Record<PlayableScenarioId, Scene> = {
     "dating-norms": sceneDatingNorms,
     "digital-support": sceneDigitalSupport,
 };
+
+

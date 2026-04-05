@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "My First Narraleaf App",
+  title: "Beyond the Screen",
   description: "Your journey starts here",
   icons: {
     icon: '/favicon.ico',

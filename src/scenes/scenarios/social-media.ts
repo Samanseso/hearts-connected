@@ -1,4 +1,4 @@
-import { FadeIn, Menu } from "narraleaf-react";
+﻿import { FadeIn, Menu } from "narraleaf-react";
 import {
     alex,
     createScene1SpritePair,
@@ -11,7 +11,6 @@ import {
 import {
     adjustStats,
     finishScenario,
-    genderWord,
     scenarioIntro,
 } from "@/scenes/core/helpers";
 import { sceneResult, sceneSocialMedia } from "@/scenes/core/scenes";
@@ -41,7 +40,7 @@ export function registerSocialMediaScenario() {
         jamieSprite.show({ duration: 500 }),
         alexLook("insecure"),
         alex`Jamie is standing right here, and somehow a stranger's anniversary reel is still louder in my head than the actual person I care about.`,
-        alex`Half the time the feed makes me feel like I'm failing at being a good ${genderWord("boyfriend", "girlfriend")}.`,
+        alex`Half the time the feed makes me feel like I'm failing at being a good partner.`,
         jamieLook("concern"),
         jamie`You look far away. Did today drain you that much?`,
         alexLook("neutral"),
@@ -197,6 +196,8 @@ export function registerSocialMediaScenario() {
             ]),
     ]);
 }
+
+
 
 
 

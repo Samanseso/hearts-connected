@@ -14,7 +14,6 @@ type StoredProgress = Pick<
     | "endingGallery"
     | "endingsDiscoveredCount"
     | "reflectionUnlocked"
-    | "playerGender"
     | "latestScenarioScore"
     | "latestScenarioGrade"
     | "bestScenarioScores"
@@ -58,7 +57,6 @@ function normalizeStoredProgress(
             ? value.endingsDiscoveredCount
             : endingGallery.length,
         reflectionUnlocked: Boolean(value?.reflectionUnlocked),
-        playerGender: value?.playerGender === "boy" ? "boy" : "girl",
         latestScenarioScore: typeof value?.latestScenarioScore === "number" ? value.latestScenarioScore : 0,
         latestScenarioGrade: value?.latestScenarioGrade ?? "none",
         bestScenarioScores,
@@ -120,7 +118,6 @@ export function saveStoredProgress(liveGame: LiveGameLike) {
             endingGallery: namespace.get("endingGallery") as PersisData["endingGallery"],
             endingsDiscoveredCount: namespace.get("endingsDiscoveredCount") as PersisData["endingsDiscoveredCount"],
             reflectionUnlocked: namespace.get("reflectionUnlocked") as PersisData["reflectionUnlocked"],
-            playerGender: namespace.get("playerGender") as PersisData["playerGender"],
             latestScenarioScore: namespace.get("latestScenarioScore") as PersisData["latestScenarioScore"],
             latestScenarioGrade: namespace.get("latestScenarioGrade") as PersisData["latestScenarioGrade"],
             bestScenarioScores: namespace.get("bestScenarioScores") as PersisData["bestScenarioScores"],

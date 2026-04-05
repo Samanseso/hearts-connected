@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useGame } from "narraleaf-react";
 import { SAVE_KEY } from "@/components/game-hud/constants";
 import { SettingsPanel } from "@/components/game-hud/settings-panel";
+import { SceneAudioPlayer } from "@/components/scene-audio-player";
 import { StoryInfoPanel } from "@/components/game-hud/story-info-panel";
 import { StoryInfoToggle } from "@/components/game-hud/story-info-toggle";
 import type { SpeedMode } from "@/components/game-hud/types";
@@ -157,6 +158,11 @@ export function GameHud({ onReturnToStart, onClearData }: GameHudProps) {
                             style={{ backgroundImage: "url('/asset/Icons/Settings.png')" }}
                         />
                     </button>
+
+                    <SceneAudioPlayer
+                        currentScenario={persis.currentScenario}
+                        currentEnding={persis.currentEnding}
+                    />
 
                     {settingsOpen ? (
                         <SettingsPanel

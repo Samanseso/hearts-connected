@@ -1,9 +1,8 @@
-import { Menu } from "narraleaf-react";
+﻿import { Menu } from "narraleaf-react";
 import { createScene7SpritePair, lea, micah, scene7SpriteAssets } from "@/scenes/core/cast";
 import {
     adjustStats,
     finishScenario,
-    genderWord,
     scenarioIntro,
 } from "@/scenes/core/helpers";
 import { sceneDigitalSupport, sceneResult } from "@/scenes/core/scenes";
@@ -19,7 +18,7 @@ export function registerDigitalSupportScenario() {
         micahSprite.show({ duration: 500 }),
         "Lea has had a brutal day, texts Micah for comfort, and then sees the green online dot appear without any reply.",
         lea`Being online and being emotionally available are really not the same thing, but it still hurts in the moment.`,
-        lea`The worst part is how fast my brain turns one unread message into a whole speech about being an unimportant ${genderWord("boyfriend", "girlfriend")}.`,
+        lea`The worst part is how fast my brain turns one unread message into a whole speech about being unimportant to someone I care about.`,
         Menu.prompt("What does Lea do with the silence?")
             .choose("Send the annoyed version before the hurt gets any bigger.", [
                 adjustStats({ communication: -10, anxiety: 10, pressure: 8, trust: -6 }),
@@ -124,6 +123,8 @@ export function registerDigitalSupportScenario() {
             ]),
     ]);
 }
+
+
 
 
 

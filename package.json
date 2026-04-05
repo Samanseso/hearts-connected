@@ -6,7 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "generate:voices": "node scripts/generate-voice-prompts.js",
+    "generate:podcasts": "npm run generate:voices && node scripts/generate-scene-podcast-prompts.js",
+    "generate:line-audio": "node scripts/generate-gemini-line-audio.js",
+    "generate:audio-manifest": "node scripts/generate-line-audio-manifest.js"
   },
   "dependencies": {
     "clsx": "^2.1.1",

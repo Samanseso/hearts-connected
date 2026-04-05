@@ -1,10 +1,10 @@
-import { Condition, Menu } from "narraleaf-react";
+﻿import { Condition, Menu } from "narraleaf-react";
 import { CHARACTER_GROUPS } from "@/lib/character-data";
 import { PLAYABLE_SCENARIO_IDS, SCENARIO_META, TOTAL_ENDINGS, TOTAL_SCENARIOS } from "@/lib/game-data";
 import { persis } from "@/lib/persistents";
 import { RESEARCH_NOTES } from "@/lib/research-data";
 import { createSingleSprite, narra } from "@/scenes/core/cast";
-import { genderWord, resetHubState, setHubPage } from "@/scenes/core/helpers";
+import { resetHubState, setHubPage } from "@/scenes/core/helpers";
 import {
     characterScenes,
     scenarioSceneMap,
@@ -53,7 +53,7 @@ export function registerHubAndExtras() {
             hubSprite.show({ duration: 500 }),
             "Story Hub",
             narra`Choose a case study in modern relationships and see how communication, timing, pressure, and self-awareness shift the outcome.`,
-            narra.say`Current perspective: ${genderWord("boy", "girl")}.`,
+
             narra.say`Progress so far: ${persis.get("completedCount")} of ${TOTAL_SCENARIOS} stories completed, ${persis.get("endingsDiscoveredCount")} of ${TOTAL_ENDINGS} endings discovered.`,
             narra.say`Open the dashboard panel for research notes, character files, the achievement board, and credits.`,
             menu,
@@ -183,4 +183,7 @@ export function registerHubAndExtras() {
             .choose("Return to the story hub", [scene.jumpTo(sceneHub)]),
     ]);
 }
+
+
+
 

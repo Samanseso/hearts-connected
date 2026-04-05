@@ -8,7 +8,6 @@ import { SAVE_KEY } from "@/components/game-hud/constants";
 import { GameHud } from "@/lib/game-hud";
 import { GameDialog } from "@/lib/dialog";
 import { GameMenu } from "@/lib/menu";
-import { PERSIS_NAMESPACE, type PlayerGender } from "@/lib/persistents";
 import {
     clearStoredProgress,
     restoreStoredProgress,
@@ -39,7 +38,6 @@ function App() {
     const [playerReady, setPlayerReady] = useState(false);
     const [started, setStarted] = useState(false);
     const [launchMode, setLaunchMode] = useState<LaunchMode>(null);
-    const [selectedGender, setSelectedGender] = useState<PlayerGender>("girl");
     const [progressPreview, setProgressPreview] = useState<ReturnType<typeof readStoredProgress>>(null);
 
     useEffect(() => {
@@ -54,13 +52,11 @@ function App() {
             defaultMenuChoiceColor: "white",
             defaultNametagColor: "#2987a1",
         });
-        game.preference.setPreference("cps", 30);
+        game.preference.setPreference("cps", 50);
     }, [game]);
 
     useEffect(() => {
-        const storedProgress = readStoredProgress();
-        setSelectedGender(storedProgress?.playerGender ?? "girl");
-        setProgressPreview(storedProgress);
+        setProgressPreview(readStoredProgress());
         setHydrated(true);
     }, []);
 
@@ -124,18 +120,10 @@ function App() {
         }
     }
 
-    function applySelectedGender(liveGame = game.getLiveGame()) {
-        liveGame
-            .getStorable()
-            .getNamespace(PERSIS_NAMESPACE)
-            .assign({ playerGender: selectedGender });
-    }
-
     function initializeSession(liveGame = game.getLiveGame()) {
         clearLoadingTimer();
         liveGame.newGame();
         restoreStoredProgress(liveGame);
-        applySelectedGender(liveGame);
         progressReadyRef.current = true;
         saveStoredProgress(liveGame);
         setProgressPreview(readStoredProgress());
@@ -189,7 +177,6 @@ function App() {
         setLaunchMode(null);
         liveGame.newGame();
         restoreStoredProgress(liveGame);
-        applySelectedGender(liveGame);
         saveStoredProgress(liveGame);
         setProgressPreview(readStoredProgress());
         setStarted(false);
@@ -210,7 +197,6 @@ function App() {
         }
 
         liveGame.newGame();
-        setSelectedGender("girl");
         setProgressPreview(null);
         setStarted(false);
     }
@@ -227,10 +213,10 @@ function App() {
     const loadingDetail =
         launchMode === "continue"
             ? "Restoring progress, scenes, and route memory."
-            : "Building your session, perspective, and first load.";
+            : "Building your session and first load.";
 
     return (
-        <div className="relative h-screen w-screen overflow-hidden">
+        <div className="relative h-screen w-screen overflow-hidden bg-[#08060b]">
             {playerMounted ? (
                 <Player
                     story={story}
@@ -243,10 +229,8 @@ function App() {
             {!started && !launchMode ? (
                 <LandingScreen
                     ready={hydrated && (!playerMounted || playerReady)}
-                    selectedGender={selectedGender}
                     completedCount={progressPreview?.completedCount ?? 0}
                     endingsFound={progressPreview?.endingsDiscoveredCount ?? 0}
-                    onGenderChange={setSelectedGender}
                     onStart={startStory}
                 />
             ) : null}

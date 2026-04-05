@@ -1,15 +1,27 @@
-import { Menu } from "narraleaf-react";
-import { casey, createScene5SpritePair, morgan, scene5SpriteAssets } from "@/scenes/core/cast";
+﻿import { FadeIn, Menu } from "narraleaf-react";
+import {
+    casey,
+    createScene5SpritePair,
+    morgan,
+    scene5CaseyExpressions,
+    scene5MorganExpressions,
+    scene5SpriteAssets,
+} from "@/scenes/core/cast";
 import {
     adjustStats,
     finishScenario,
-    genderWord,
     scenarioIntro,
 } from "@/scenes/core/helpers";
 import { sceneCommitment, sceneResult } from "@/scenes/core/scenes";
 
 export function registerCommitmentScenario() {
     const [caseySprite, morganSprite] = createScene5SpritePair();
+    const caseySwap = new FadeIn(170, [-34, 0], "easeOut");
+    const morganSwap = new FadeIn(170, [34, 0], "easeOut");
+    const caseyLook = (expression: keyof typeof scene5CaseyExpressions) =>
+        caseySprite.char(scene5CaseyExpressions[expression], caseySwap.copy());
+    const morganLook = (expression: keyof typeof scene5MorganExpressions) =>
+        morganSprite.char(scene5MorganExpressions[expression], morganSwap.copy());
 
     scene5SpriteAssets.forEach((asset) => sceneCommitment.preloadImage(asset));
 
@@ -17,24 +29,37 @@ export function registerCommitmentScenario() {
         ...scenarioIntro("commitment-decisions"),
         caseySprite.show({ duration: 500 }),
         morganSprite.show({ duration: 500 }),
+        morganLook("serious"),
         morgan`Can I ask the future question without making it sound like an ultimatum?`,
+        caseyLook("concern"),
         casey`You asking it that carefully already tells me it matters.`,
+        morganLook("concern"),
         morgan`It does. Graduation is close. Schedules are changing. I just want to know how you see us.`,
+        caseyLook("serious"),
         casey`I care about you. That's the easy part. The hard part is that everyone talks about commitment like a confident person should answer immediately.`,
-        casey`Meanwhile I'm over here wondering whether being a good ${genderWord("boyfriend", "girlfriend")} means certainty or just honesty.`,
+        caseyLook("concern"),
+        casey`Meanwhile I'm over here wondering whether being a good partner means certainty or just honesty.`,
         Menu.prompt("How does Casey answer Morgan's question?")
             .choose("Promise more than you are fully sure about because you hate disappointing people.", [
                 adjustStats({ commitment: 10, pressure: 10, anxiety: 6, communication: -4 }),
+                caseyLook("serious"),
                 casey`I'm ready. Or at least I should be. We can do the long-term version.`,
+                morganLook("serious"),
                 morgan`Should be and are are not the same sentence.`,
+                caseyLook("concern"),
                 casey`I know. I just don't want my uncertainty to sound like lack of love.`,
+                morganLook("upset"),
                 morgan`Then don't replace uncertainty with a promise you can't breathe inside.`,
                 Menu.prompt("What does Casey do after hearing that warning?")
                     .choose("Keep the promise anyway and hope certainty catches up later.", [
                         adjustStats({ pressure: 12, commitment: 6, anxiety: 8, selfRespect: -4 }),
+                        caseyLook("serious"),
                         casey`Maybe committing harder is how I grow into it.`,
+                        morganLook("upset"),
                         morgan`Or maybe it's how you burn out trying to be the version of you that answered too quickly.`,
+                        caseyLook("concern"),
                         casey`I don't know how to tell the difference yet.`,
+                        morganLook("serious"),
                         morgan`That's exactly why this feels fragile.`,
                         ...finishScenario(scene, sceneResult, "commitment-decisions", {
                             endingId: "pressure",
@@ -48,9 +73,13 @@ export function registerCommitmentScenario() {
                     ])
                     .choose("Pull back and re-answer with more honesty before the moment hardens.", [
                         adjustStats({ communication: 14, trust: 12, pressure: -10, anxiety: -6 }),
+                        caseyLook("open"),
                         casey`No, let me try again. I'm not unsure about you. I'm unsure about saying yes to a whole future when I'm still figuring out where I'll even be standing in six months.`,
+                        morganLook("soft"),
                         morgan`That answer I can work with, because it's real.`,
+                        caseyLook("soft"),
                         casey`I can offer commitment to the process, even if I can't offer a flawless five-year script tonight.`,
+                        morganLook("open"),
                         morgan`That kind of honesty makes me feel closer to you, not farther.`,
                         ...finishScenario(scene, sceneResult, "commitment-decisions", {
                             endingId: "healthy",
@@ -65,16 +94,24 @@ export function registerCommitmentScenario() {
             ])
             .choose("Say you need more time, but explain what that actually means.", [
                 adjustStats({ communication: 12, trust: 8, pressure: -6, selfRespect: 6 }),
+                caseyLook("concern"),
                 casey`I need more time, but I don't want that answer to sound like a vague parking lot for your feelings.`,
+                morganLook("concern"),
                 morgan`Okay. Then tell me what "more time" actually holds.`,
+                caseyLook("serious"),
                 casey`It means I want us to keep building this while I figure out what post-grad life is going to ask of me. I don't want to promise from fear or stall from cowardice.`,
+                morganLook("soft"),
                 morgan`That's a much kinder answer than silence.`,
                 Menu.prompt("How concrete is Casey willing to be?")
                     .choose("Offer a real timeline for checking back in together.", [
                         adjustStats({ commitment: 8, communication: 10, trust: 10, contentment: 6 }),
+                        caseyLook("open"),
                         casey`Can we revisit this at the end of the semester? Not because I'm counting down to freedom, but because I want to answer with the version of me who has real information, not panic.`,
+                        morganLook("open"),
                         morgan`That feels fair. I can hold uncertainty better when it has shape.`,
+                        caseyLook("soft"),
                         casey`Then let's build shape instead of pretending certainty.`,
+                        morganLook("soft"),
                         morgan`Deal.`,
                         ...finishScenario(scene, sceneResult, "commitment-decisions", {
                             endingId: "healthy",
@@ -88,9 +125,13 @@ export function registerCommitmentScenario() {
                     ])
                     .choose("Keep the answer true but so open-ended that Morgan still feels stranded.", [
                         adjustStats({ communication: -6, trust: -6, pressure: 6, contentment: -4 }),
+                        caseyLook("concern"),
                         casey`I just know I can't answer tonight. I don't know when I can.`,
+                        morganLook("upset"),
                         morgan`I appreciate the honesty more than a fake yes. I just also need to know I'm not waiting inside a hallway with no doors.`,
+                        caseyLook("soft"),
                         casey`That's fair. I just don't have a better sentence yet.`,
+                        morganLook("serious"),
                         morgan`Then I think we may want different amounts of direction right now.`,
                         ...finishScenario(scene, sceneResult, "commitment-decisions", {
                             endingId: "breakup",
@@ -105,16 +146,24 @@ export function registerCommitmentScenario() {
             ])
             .choose("Avoid the question because saying the wrong thing feels worse than saying nothing.", [
                 adjustStats({ communication: -10, anxiety: 8, trust: -8, pressure: 6 }),
+                caseyLook("upset"),
                 casey`Can we not do the future tonight? I barely survived this week in the present.`,
+                morganLook("upset"),
                 morgan`I could accept "not tonight" more easily if it didn't feel like a pattern.`,
+                caseyLook("concern"),
                 casey`I know. I just feel cornered by questions that don't have clean answers.`,
+                morganLook("serious"),
                 morgan`And I feel pushed away by silence that keeps standing in for answers.`,
                 Menu.prompt("What happens after the dodge?")
                     .choose("Come back and explain the fear instead of hiding behind it.", [
                         adjustStats({ communication: 12, trust: 10, anxiety: -6, selfRespect: 6 }),
+                        caseyLook("open"),
                         casey`You're right. I keep avoiding because I think one wrong sentence will damage us, and then I damage us more by disappearing from the conversation entirely.`,
+                        morganLook("soft"),
                         morgan`That makes sense. It's painful, but it makes sense.`,
+                        caseyLook("soft"),
                         casey`I don't have perfect clarity tonight. I do have the willingness to stay in the conversation with you.`,
+                        morganLook("open"),
                         morgan`That's enough for me to keep walking with.`,
                         ...finishScenario(scene, sceneResult, "commitment-decisions", {
                             endingId: "healthy",
@@ -128,9 +177,13 @@ export function registerCommitmentScenario() {
                     ])
                     .choose("Stay inside the silence and hope the moment expires on its own.", [
                         adjustStats({ communication: -10, trust: -10, contentment: -8, pressure: 8 }),
+                        caseyLook("concern"),
                         casey`I really don't know what to say.`,
+                        morganLook("upset"),
                         morgan`Then I need to say something for myself. I can't keep building around absence and calling it patience.`,
+                        caseyLook("serious"),
                         casey`So that's it?`,
+                        morganLook("serious"),
                         morgan`No. That's the result of this happening too many times.`,
                         ...finishScenario(scene, sceneResult, "commitment-decisions", {
                             endingId: "breakup",
@@ -145,6 +198,3 @@ export function registerCommitmentScenario() {
             ]),
     ]);
 }
-
-
-
