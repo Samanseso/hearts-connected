@@ -44,7 +44,7 @@ export function registerHubAndExtras() {
 
         for (const scenarioId of PLAYABLE_SCENARIO_IDS) {
             const meta = SCENARIO_META[scenarioId];
-            menu = menu.choose(`${meta.shortLabel}. ${meta.title}`, [scene.jumpTo(scenarioSceneMap[scenarioId])]);
+            menu = menu.choose(meta.title, [scene.jumpTo(scenarioSceneMap[scenarioId])]);
         }
 
 
@@ -54,7 +54,6 @@ export function registerHubAndExtras() {
             "Story Hub",
             narra`Choose a case study in modern relationships and see how communication, timing, pressure, and self-awareness shift the outcome.`,
 
-            narra.say`Progress so far: ${persis.get("completedCount")} of ${TOTAL_SCENARIOS} stories completed, ${persis.get("endingsDiscoveredCount")} of ${TOTAL_ENDINGS} endings discovered.`,
             narra.say`Open the dashboard panel for research notes, character files, the achievement board, and credits.`,
             menu,
         ];
@@ -183,7 +182,6 @@ export function registerHubAndExtras() {
             .choose("Return to the story hub", [scene.jumpTo(sceneHub)]),
     ]);
 }
-
 
 
 

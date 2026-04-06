@@ -14,11 +14,12 @@ import {
     saveStoredProgress,
     readStoredProgress,
 } from "@/lib/progress-storage";
+import { preloadVisualAssets } from "@/scenes/core/visual-assets";
 import { story } from "../lib/story";
 
 type LaunchMode = "new" | "continue" | null;
 
-const MIN_LOADING_SCREEN_MS = 900;
+const MIN_LOADING_SCREEN_MS = 3000;
 
 function hasSavedRun(progress: ReturnType<typeof readStoredProgress>) {
     return Boolean(
@@ -27,18 +28,50 @@ function hasSavedRun(progress: ReturnType<typeof readStoredProgress>) {
     );
 }
 
+function preloadImageAsset(src: string) {
+    if (typeof window === "undefined") {
+        return Promise.resolve();
+    }
+
+    return new Promise<void>((resolve) => {
+        const image = new window.Image();
+        let settled = false;
+
+        const finish = () => {
+            if (settled) {
+                return;
+            }
+
+            settled = true;
+            resolve();
+        };
+
+        image.decoding = "async";
+        image.loading = "eager";
+        image.onload = finish;
+        image.onerror = finish;
+        image.src = src;
+
+        if (image.complete) {
+            finish();
+            return;
+        }
+
+        image.decode?.().then(finish).catch(() => undefined);
+    });
+}
+
 function App() {
     const game = useGame();
     const progressReadyRef = useRef(false);
-    const pendingStartRef = useRef(false);
-    const launchStartedAtRef = useRef<number | null>(null);
     const loadingTimerRef = useRef<number | null>(null);
+    const preloadAssetsPromiseRef = useRef<Promise<void> | null>(null);
     const [hydrated, setHydrated] = useState(false);
-    const [playerMounted, setPlayerMounted] = useState(false);
     const [playerReady, setPlayerReady] = useState(false);
     const [started, setStarted] = useState(false);
     const [launchMode, setLaunchMode] = useState<LaunchMode>(null);
     const [progressPreview, setProgressPreview] = useState<ReturnType<typeof readStoredProgress>>(null);
+    const [visualAssetsReady, setVisualAssetsReady] = useState(false);
 
     useEffect(() => {
         game.configure({
@@ -58,6 +91,10 @@ function App() {
     useEffect(() => {
         setProgressPreview(readStoredProgress());
         setHydrated(true);
+    }, []);
+
+    useEffect(() => {
+        void ensureVisualAssetsReady();
     }, []);
 
     useEffect(() => {
@@ -120,6 +157,27 @@ function App() {
         }
     }
 
+    function ensureVisualAssetsReady() {
+        if (visualAssetsReady) {
+            return Promise.resolve();
+        }
+
+        if (!preloadAssetsPromiseRef.current) {
+            preloadAssetsPromiseRef.current = Promise.all(
+                preloadVisualAssets.map((asset) => preloadImageAsset(asset)),
+            )
+                .catch(() => undefined)
+                .then(() => {
+                    setVisualAssetsReady(true);
+                })
+                .finally(() => {
+                    preloadAssetsPromiseRef.current = null;
+                });
+        }
+
+        return preloadAssetsPromiseRef.current;
+    }
+
     function initializeSession(liveGame = game.getLiveGame()) {
         clearLoadingTimer();
         liveGame.newGame();
@@ -127,44 +185,20 @@ function App() {
         progressReadyRef.current = true;
         saveStoredProgress(liveGame);
         setProgressPreview(readStoredProgress());
-
-        const startedAt = launchStartedAtRef.current ?? Date.now();
-        const elapsed = Date.now() - startedAt;
-        const remaining = Math.max(0, MIN_LOADING_SCREEN_MS - elapsed);
-
-        const finalizeLaunch = () => {
-            pendingStartRef.current = false;
-            launchStartedAtRef.current = null;
+        loadingTimerRef.current = window.setTimeout(() => {
             loadingTimerRef.current = null;
             setStarted(true);
             setLaunchMode(null);
-        };
-
-        if (remaining === 0) {
-            finalizeLaunch();
-            return;
-        }
-
-        loadingTimerRef.current = window.setTimeout(finalizeLaunch, remaining);
+        }, MIN_LOADING_SCREEN_MS);
     }
 
     function startStory() {
-        if (launchMode) {
+        if (launchMode || !playerReady || !visualAssetsReady) {
             return;
         }
 
-        launchStartedAtRef.current = Date.now();
-        pendingStartRef.current = true;
         setLaunchMode(hasSavedRun(progressPreview) ? "continue" : "new");
-
-        if (!playerMounted) {
-            setPlayerMounted(true);
-            return;
-        }
-
-        if (playerReady) {
-            initializeSession();
-        }
+        initializeSession();
     }
 
     function returnToStartScreen() {
@@ -172,8 +206,6 @@ function App() {
 
         clearLoadingTimer();
         progressReadyRef.current = false;
-        pendingStartRef.current = false;
-        launchStartedAtRef.current = null;
         setLaunchMode(null);
         liveGame.newGame();
         restoreStoredProgress(liveGame);
@@ -187,8 +219,6 @@ function App() {
 
         clearLoadingTimer();
         progressReadyRef.current = false;
-        pendingStartRef.current = false;
-        launchStartedAtRef.current = null;
         setLaunchMode(null);
         clearStoredProgress();
 
@@ -201,23 +231,19 @@ function App() {
         setStarted(false);
     }
 
-    function handleOnReady({ liveGame }: PlayerEventContext) {
+    function handleOnReady(_context: PlayerEventContext) {
         setPlayerReady(true);
-
-        if (pendingStartRef.current) {
-            initializeSession(liveGame);
-        }
     }
 
     const loadingTitle = launchMode === "continue" ? "Opening your dashboard" : "Preparing the story";
     const loadingDetail =
         launchMode === "continue"
-            ? "Restoring progress, scenes, and route memory."
-            : "Building your session and first load.";
+            ? "Restoring progress and warming your route memory."
+            : "Loading character art, scenes, and your first session.";
 
     return (
         <div className="relative h-screen w-screen overflow-hidden bg-[#08060b]">
-            {playerMounted ? (
+            {hydrated ? (
                 <Player
                     story={story}
                     width="100vw"
@@ -228,14 +254,14 @@ function App() {
             {started ? <GameHud onReturnToStart={returnToStartScreen} onClearData={clearGameData} /> : null}
             {!started && !launchMode ? (
                 <LandingScreen
-                    ready={hydrated && (!playerMounted || playerReady)}
+                    ready={hydrated && visualAssetsReady && playerReady}
                     completedCount={progressPreview?.completedCount ?? 0}
                     endingsFound={progressPreview?.endingsDiscoveredCount ?? 0}
                     onStart={startStory}
                 />
             ) : null}
             {!started && launchMode ? (
-                <LoadingScreen title={loadingTitle} detail={loadingDetail} />
+                <LoadingScreen title={loadingTitle} detail={loadingDetail} durationMs={MIN_LOADING_SCREEN_MS} />
             ) : null}
         </div>
     );

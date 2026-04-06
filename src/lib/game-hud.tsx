@@ -6,6 +6,7 @@ import { SAVE_KEY } from "@/components/game-hud/constants";
 import { SettingsPanel } from "@/components/game-hud/settings-panel";
 import { SceneAudioPlayer } from "@/components/scene-audio-player";
 import { StoryInfoPanel } from "@/components/game-hud/story-info-panel";
+import { CharacterShowcaseScreen } from "@/components/game-hud/character-showcase-screen";
 import { StoryInfoToggle } from "@/components/game-hud/story-info-toggle";
 import type { SpeedMode } from "@/components/game-hud/types";
 import { useHudSnapshot } from "@/components/game-hud/use-hud-snapshot";
@@ -22,6 +23,7 @@ export function GameHud({ onReturnToStart, onClearData }: GameHudProps) {
     const { snapshot, refreshSnapshot } = useHudSnapshot(game);
     const [infoOpen, setInfoOpen] = useState(false);
     const [settingsOpen, setSettingsOpen] = useState(false);
+    const [characterShowcaseOpen, setCharacterShowcaseOpen] = useState(false);
 
     const { persis } = snapshot;
     const currentMeta = useMemo(() => {
@@ -50,6 +52,16 @@ export function GameHud({ onReturnToStart, onClearData }: GameHudProps) {
         // Automatically open infor panel after loading
         // setInfoOpen(isDashboardScene);
     }, [persis.currentScenario]);
+
+    function openCharacterShowcase() {
+        setCharacterShowcaseOpen(true);
+        setInfoOpen(false);
+        setSettingsOpen(false);
+    }
+
+    function closeCharacterShowcase() {
+        setCharacterShowcaseOpen(false);
+    }
 
     function quickSave() {
         try {
@@ -143,6 +155,7 @@ export function GameHud({ onReturnToStart, onClearData }: GameHudProps) {
                             endingsFound={endingsFound}
                             title={infoTitle}
                             icon={infoIcon}
+                            onOpenCharacters={openCharacterShowcase}
                         />
                     )}
                 </div>
@@ -177,6 +190,13 @@ export function GameHud({ onReturnToStart, onClearData }: GameHudProps) {
                     ) : null}
                 </div>
             </div>
+
+            {characterShowcaseOpen ? (
+                <CharacterShowcaseScreen
+                    persis={persis}
+                    onClose={closeCharacterShowcase}
+                />
+            ) : null}
         </div>
     );
 }

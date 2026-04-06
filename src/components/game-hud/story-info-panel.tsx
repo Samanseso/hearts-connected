@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { CHARACTER_GROUPS } from "@/lib/character-data";
 import { STAT_LABELS, STAT_ORDER } from "@/components/game-hud/constants";
 import { ScenarioChecklist } from "@/components/game-hud/scenario-checklist";
 import { StatBar } from "@/components/game-hud/stat-bar";
@@ -17,14 +16,14 @@ type StoryInfoPanelProps = {
     endingsFound: number;
     title: string;
     icon: string;
+    onOpenCharacters: () => void;
 };
 
-type HubSection = "overview" | "research" | "characters" | "achievements" | "credits";
+type HubSection = "overview" | "research" | "achievements" | "credits";
 
 const HUB_SECTIONS: Array<{ id: HubSection; label: string }> = [
     { id: "overview", label: "Overview" },
     { id: "research", label: "Research Notes" },
-    { id: "characters", label: "Characters" },
     { id: "achievements", label: "Achievements" },
     { id: "credits", label: "Credits" },
 ];
@@ -110,6 +109,7 @@ export function StoryInfoPanel({
     endingsFound,
     title,
     icon,
+    onOpenCharacters,
 }: StoryInfoPanelProps) {
     const [hubSection, setHubSection] = useState<HubSection>("overview");
     const meanScore = averageBestScore(persis);
@@ -207,6 +207,11 @@ export function StoryInfoPanel({
                                     onClick={() => setHubSection(section.id)}
                                 />
                             ))}
+                            <HubSectionButton
+                                active={false}
+                                label="Characters"
+                                onClick={onOpenCharacters}
+                            />
                         </div>
 
                         {hubSection === "overview" ? (
@@ -291,52 +296,7 @@ export function StoryInfoPanel({
                             </div>
                         ) : null}
 
-                        {hubSection === "characters" ? (
-                            <div className="space-y-3">
-                                {CHARACTER_GROUPS.map((group) => (
-                                    <div
-                                        key={group.id}
-                                        className="rounded-[20px] bg-white/72 px-4 py-4 shadow-[0_8px_20px_rgba(92,54,75,0.12)]"
-                                    >
-                                        <div className="text-[12px] uppercase tracking-[0.16em] text-[#8a6072]">
-                                            {group.scenarioTitle}
-                                        </div>
-                                        <h3 className="mt-2 text-[20px] font-semibold text-[#513746]">
-                                            {group.label}
-                                        </h3>
-                                        <p className="mt-2 text-[13px] leading-6 text-[#6d4a5b]">
-                                            {group.hook}
-                                        </p>
-
-                                        <div className="mt-4 grid gap-3 md:grid-cols-2">
-                                            {group.profiles.map((profile) => (
-                                                <div
-                                                    key={profile.name}
-                                                    className="rounded-[18px] bg-white/78 px-4 py-3 shadow-[0_8px_18px_rgba(92,54,75,0.1)]"
-                                                >
-                                                    <div className="flex items-center justify-between gap-3">
-                                                        <div className="text-[16px] font-semibold text-[#513746]">
-                                                            {profile.name}
-                                                        </div>
-                                                        <div className="rounded-full bg-[#f7d8ea] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#6a4254]">
-                                                            {profile.role}
-                                                        </div>
-                                                    </div>
-                                                    <div className="mt-2 text-[11px] uppercase tracking-[0.14em] text-[#8b6274]">
-                                                        {profile.traits}
-                                                    </div>
-                                                    <p className="mt-2 text-[13px] leading-6 text-[#6d4a5b]">
-                                                        {profile.intro}
-                                                    </p>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        ) : null}
-
-                        {hubSection === "achievements" ? (
+                                                {hubSection === "achievements" ? (
                             <div className="space-y-3">
                                 <div className="grid gap-3 sm:grid-cols-3">
                                     <div className="rounded-[20px] bg-white/72 px-4 py-3 shadow-[0_8px_20px_rgba(92,54,75,0.12)]">

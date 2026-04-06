@@ -1,13 +1,50 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 type LoadingScreenProps = {
     title: string;
     detail: string;
+    durationMs?: number;
 };
 
-export function LoadingScreen({ title, detail }: LoadingScreenProps) {
+const EXPONENTIAL_SHARPNESS = 5;
+
+function getExponentialProgress(elapsedMs: number, durationMs: number) {
+    const normalizedTime = Math.min(Math.max(elapsedMs / durationMs, 0), 1);
+    const numerator = 1 - Math.exp(-EXPONENTIAL_SHARPNESS * normalizedTime);
+    const denominator = 1 - Math.exp(-EXPONENTIAL_SHARPNESS);
+    return numerator / denominator;
+}
+
+export function LoadingScreen({ title, detail, durationMs = 3000 }: LoadingScreenProps) {
+    const [progress, setProgress] = useState(0);
+
+    useEffect(() => {
+        let frame = 0;
+        const startedAt = performance.now();
+
+        const tick = (now: number) => {
+            const nextProgress = getExponentialProgress(now - startedAt, durationMs);
+            setProgress(nextProgress);
+
+            if (nextProgress < 1) {
+                frame = window.requestAnimationFrame(tick);
+            }
+        };
+
+        setProgress(0);
+        frame = window.requestAnimationFrame(tick);
+
+        return () => {
+            window.cancelAnimationFrame(frame);
+        };
+    }, [durationMs, title, detail]);
+
+    const percentage = Math.min(100, Math.round(progress * 100));
+
     return (
-        <div className="absolute inset-0 z-50 overflow-hidden text-[#fff7fb]">
+        <div className="fixed inset-0 z-[100] overflow-hidden text-[#fff7fb]">
             <div
                 className="loading-backdrop-shift absolute inset-0 bg-cover bg-center"
                 style={{ backgroundImage: "url('/asset/background.png')" }}
@@ -28,13 +65,19 @@ export function LoadingScreen({ title, detail }: LoadingScreenProps) {
 
                 <div className="absolute inset-x-0 bottom-[7vh] px-4 sm:px-8">
                     <div className="mx-auto w-full max-w-[760px]">
-                        <div className="text-center text-[16px] font-semibold text-white drop-shadow-[0_8px_24px_rgba(0,0,0,0.42)] sm:text-[22px]">
-                            {title}
+                        <div className="flex items-center justify-between gap-4 text-white drop-shadow-[0_8px_24px_rgba(0,0,0,0.42)]">
+                            <div className="text-[16px] font-semibold sm:text-[22px]">{title}</div>
+                            <div className="text-[15px] font-semibold uppercase tracking-[0.18em] text-white/82 sm:text-[18px]">
+                                {percentage}%
+                            </div>
                         </div>
 
                         <div className="mt-4 rounded-full border border-white/18 bg-[linear-gradient(180deg,rgba(10,7,12,0.82),rgba(0,0,0,0.58))] p-1.5 shadow-[0_24px_44px_rgba(0,0,0,0.36)]">
                             <div className="h-3 overflow-hidden rounded-full bg-white/10">
-                                <div className="loading-bar h-full rounded-full bg-[linear-gradient(90deg,#f08bc3,#ffd8ea,#8edcf0,#f08bc3)] shadow-[0_0_24px_rgba(255,180,222,0.4)]" />
+                                <div
+                                    className="h-full rounded-full bg-[linear-gradient(90deg,#f08bc3,#ffd8ea,#8edcf0,#f08bc3)] shadow-[0_0_24px_rgba(255,180,222,0.4)] transition-[width] duration-75"
+                                    style={{ width: percentage + "%" }}
+                                />
                             </div>
                         </div>
 

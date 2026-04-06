@@ -144,6 +144,20 @@ export const scene5SpriteAssets = buildSpriteAssetList(scene5CaseyExpressions, s
 export const scene6SpriteAssets = buildSpriteAssetList(scene6DanaExpressions, scene6NicoExpressions);
 export const scene7SpriteAssets = buildSpriteAssetList(scene7LeaExpressions, scene7MicahExpressions);
 
+export const preloadVisualAssets = Array.from(
+    new Set([
+        "/asset/background.png",
+        "/char/narra.png",
+        ...scene1SpriteAssets,
+        ...scene2SpriteAssets,
+        ...scene3SpriteAssets,
+        ...scene4SpriteAssets,
+        ...scene5SpriteAssets,
+        ...scene6SpriteAssets,
+        ...scene7SpriteAssets,
+    ]),
+);
+
 export const scene1SpriteLayout: Record<"alex" | "jamie", SpriteLayout> = {
     alex: {
         xalign: 0.25,
