@@ -12,6 +12,7 @@ import type { SpeedMode } from "@/components/game-hud/types";
 import { useHudSnapshot } from "@/components/game-hud/use-hud-snapshot";
 import { SCENARIO_META } from "@/lib/game-data";
 import { clearStoredProgress } from "@/lib/progress-storage";
+import { DEFAULT_SHELL_BACKGROUND, getSceneShellBackground } from "@/lib/scene-backgrounds";
 
 type GameHudProps = {
     onReturnToStart?: () => void;
@@ -43,6 +44,20 @@ export function GameHud({ onReturnToStart, onClearData }: GameHudProps) {
         ? currentMeta.shortLabel
         : persis.currentScenarioTitle || "Story Hub";
     const infoIcon = currentMeta ? "/asset/Icons/PinkHeart.png" : "/asset/Icons/BlueHeart.png";
+
+    useEffect(() => {
+        document.documentElement.style.setProperty(
+            "--scene-shell-background-image",
+            `url("${getSceneShellBackground(persis.currentScenario)}")`,
+        );
+
+        return () => {
+            document.documentElement.style.setProperty(
+                "--scene-shell-background-image",
+                `url("${DEFAULT_SHELL_BACKGROUND}")`,
+            );
+        };
+    }, [persis.currentScenario]);
 
     useEffect(() => {
         const isDashboardScene =

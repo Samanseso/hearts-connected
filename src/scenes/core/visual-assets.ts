@@ -1,3 +1,5 @@
+import { SCENE_BACKGROUNDS } from "@/lib/scene-backgrounds";
+
 function buildSceneAssets(sceneNumber: number, characterIds: string[]) {
     return characterIds.flatMap((characterId) =>
         Array.from({ length: 6 }, (_, index) =>
@@ -10,6 +12,7 @@ export const preloadVisualAssets = Array.from(
     new Set([
         "/asset/background.png",
         "/char/narra.png",
+        ...Object.values(SCENE_BACKGROUNDS),
         ...buildSceneAssets(1, ["alex", "jamie"]),
         ...buildSceneAssets(2, ["riley", "chris"]),
         ...buildSceneAssets(3, ["sam", "taylor"]),

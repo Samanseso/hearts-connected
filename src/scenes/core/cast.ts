@@ -166,8 +166,8 @@ export const scene1SpriteLayout: Record<"alex" | "jamie", SpriteLayout> = {
     },
     jamie: {
         xalign: 0.73,
-        yalign: 0.4,
-        zoom: 0.5,
+        yalign: 0.42,
+        zoom: 0.48,
     },
 };
 
@@ -277,9 +277,9 @@ export function createSingleSprite() {
         autoFit: false,
         position: {
             xalign: 0.5,
-            yalign: 0.42,
+            yalign: 0.32,
         },
-        zoom: 0.6,
+        zoom: 0.72,
     });
 }
 

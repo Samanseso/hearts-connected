@@ -5,6 +5,7 @@
   --foreground: #3f2934;
   --heart-surface: rgba(255, 255, 255, 0.92);
   --heart-shadow: rgba(85, 51, 67, 0.18);
+  --scene-shell-background-image: url("/asset/background.png");
 }
 
 @theme inline {
@@ -46,7 +47,7 @@ button {
   background-color: #08060b;
   background-image:
     linear-gradient(180deg, rgba(8, 6, 11, 0.12) 0%, rgba(8, 6, 11, 0.48) 100%),
-    url("/asset/background.png");
+    var(--scene-shell-background-image);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;

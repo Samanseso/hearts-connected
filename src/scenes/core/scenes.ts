@@ -2,8 +2,6 @@ import { Scene } from "narraleaf-react";
 import { CHARACTER_GROUPS } from "@/lib/character-data";
 import type { PlayableScenarioId } from "@/lib/game-data";
 
-const FULLSCREEN_BACKGROUND = "/asset/background.png";
-const CHARACTER_BACKGROUND = FULLSCREEN_BACKGROUND;
 const STORY_BACKGROUND = "transparent";
 
 export const sceneHub = new Scene("hub: relationship scenarios", {
@@ -76,5 +74,3 @@ export const scenarioSceneMap: Record<PlayableScenarioId, Scene> = {
     "dating-norms": sceneDatingNorms,
     "digital-support": sceneDigitalSupport,
 };
-
-
